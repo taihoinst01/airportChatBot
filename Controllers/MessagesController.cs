@@ -199,6 +199,7 @@ namespace airportChatBot
 
                     if (dialogs.dlgType.Equals(CARDDLG))
                     {
+                        Debug.WriteLine("* CARDDLG");
                         foreach (CardList tempcard in dialogs.dialogCard)
                         {
                             tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity);
@@ -207,8 +208,10 @@ namespace airportChatBot
                     }
                     else
                     {
+                        Debug.WriteLine("* NOT CARDDLG");
                         if (activity.ChannelId.Equals("facebook") && string.IsNullOrEmpty(dialogs.cardTitle) && dialogs.dlgType.Equals(TEXTDLG))
                         {
+                            Debug.WriteLine("* NOT CARDDLG - 1");
                             Activity reply_facebook = activity.CreateReply();
                             reply_facebook.Recipient = activity.From;
                             reply_facebook.Type = "message";
@@ -220,7 +223,20 @@ namespace airportChatBot
                         }
                         else
                         {
-                            tempAttachment = dbutil.getAttachmentFromDialog(dialogs, activity);
+                            Debug.WriteLine("* NOT CARDDLG - 2");
+                            //tempAttachment = dbutil.getAttachmentFromDialog(dialogs, activity);
+
+                            HeroCard plCard = new UserHeroCard()
+                            {
+                                Title = "Welcome",
+                                Text = "반갑습니다. 인천공항공사 챗봇입니다.",
+                                Images = null,
+                                Buttons = null,
+                                Card_division = "",
+                                Card_value = ""
+                            };
+                            tempAttachment = plCard.ToAttachment();
+
                             initReply.Attachments.Add(tempAttachment);
                         }
                     }
