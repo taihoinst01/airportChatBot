@@ -256,6 +256,7 @@ namespace airportChatBot
             else if (activity.Type == ActivityTypes.Message)
             {
                 //activity.ChannelId = "facebook";
+                startTime = DateTime.Now;
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 try
                 {
@@ -293,19 +294,30 @@ namespace airportChatBot
                         response = Request.CreateResponse(HttpStatusCode.OK);
                         return response;
                     }
-
                     else if (!qnaMakerRes.Equals(""))
                     {
+                        string strReplyText = "Sorry";
+                        QnAMakerResult responseQna;
+                        responseQna = JsonConvert.DeserializeObject<QnAMakerResult>(qnaMakerRes);
+
+                        if (!responseQna.Score.Equals(0))
+                        {
+                            //Convert.ToInt32(responseQna.Score);
+                            DateTime endTime = DateTime.Now;
+                            Debug.WriteLine("프로그램 수행시간 : {0}/ms", ((endTime - startTime).Milliseconds));
+                            strReplyText = responseQna.Answer + " || score: " + Convert.ToInt32(responseQna.Score) + "p, " + ((endTime - startTime).Milliseconds) + "/ms";
+                        }
+
                         Activity reply_ment = activity.CreateReply();
                         reply_ment.Recipient = activity.From;
                         reply_ment.Type = "message";
-                        reply_ment.Text = qnaMakerRes;
+                        //reply_ment.Text = qnaMakerRes;
+                        reply_ment.Text = strReplyText;
 
                         var reply_ment_info = await connector.Conversations.SendToConversationAsync(reply_ment);
                         response = Request.CreateResponse(HttpStatusCode.OK);
                         return response;
                     }
-
                     else
                     {
                         queryStr = orgMent;
@@ -486,6 +498,7 @@ namespace airportChatBot
                             //네이버 기사 검색
                             if (sorryflag)
                             {
+                                Debug.WriteLine("sorryflag : true");
                                 //Sorry Message 
                                 int sorryMessageCheck = db.SelectUserQueryErrorMessageCheck(activity.Conversation.Id, MessagesController.chatBotID);
 
@@ -515,7 +528,7 @@ namespace airportChatBot
                                         Title = text[i].cardTitle,
                                         Text = text[i].cardText
                                     };
-
+                                    Debug.WriteLine("sorryflag : true | Title : " + text[i].cardTitle + " | Text : " + text[i].cardText);
                                     Attachment plAttachment = plCard.ToAttachment();
                                     sorryReply.Attachments.Add(plAttachment);
                                 }
@@ -709,6 +722,7 @@ namespace airportChatBot
                 DButil.HistoryLog("*** orgMent : " + strMsg + " | responseString : " + responseString);
             }
 
+            /*
             QnAMakerResult responseQna;
             try
             {
@@ -720,8 +734,10 @@ namespace airportChatBot
             {
                 throw new Exception("Unable to deserialize QnA Maker response string.");
             }
-
             return resAnswer;
+            */
+
+            return responseString;
 
         }
 
