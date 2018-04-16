@@ -279,6 +279,7 @@ namespace airportChatBot
                     long unixTime = ((DateTimeOffset)startTime).ToUnixTimeSeconds();
 
                     DButil.HistoryLog("orgMent : " + orgMent);
+                    
                     //금칙어 체크
                     CardList bannedMsg = db.BannedChk(orgMent);
                     Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
@@ -306,6 +307,9 @@ namespace airportChatBot
                             DateTime endTime = DateTime.Now;
                             Debug.WriteLine("프로그램 수행시간 : {0}/ms", ((endTime - startTime).Milliseconds));
                             strReplyText = responseQna.Answer + " || score: " + Convert.ToInt32(responseQna.Score) + "p, " + ((endTime - startTime).Milliseconds) + "/ms";
+
+                            DButil.QnALog(orgMent + " |*| " + responseQna.Answer + " |*| " + Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms");
+
                         }
 
                         Activity reply_ment = activity.CreateReply();
