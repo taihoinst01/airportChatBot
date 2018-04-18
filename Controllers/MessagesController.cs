@@ -309,9 +309,30 @@ namespace airportChatBot
                             strReplyText = responseQna.Answer + " || score: " + Convert.ToInt32(responseQna.Score) + "p, " + ((endTime - startTime).Milliseconds) + "/ms";
 
                             DButil.QnALog(orgMent + " |*| " + responseQna.Answer + " |*| " + Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms");
-                            //string logQuestion = orgMent.Trim();
-                            //string logAnswer = responseQna.Answer.Trim();
-                            //DButil.QnALogSub(Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms |*| " + logQuestion.Substring(0,16) + " |*| " + logAnswer.Substring(0,20) );
+
+                            string logQuestion = orgMent.Replace(" ", "");
+                            string logAnswer = responseQna.Answer.Replace(" ", "").Replace(Environment.NewLine, "");
+                            string strLogQuestion, strLogAnswer;
+                            if(logQuestion.Length > 20)
+                            {
+                                strLogQuestion = logQuestion.Substring(0, 20) + "...";
+                            }
+                            else
+                            {
+                                strLogQuestion = logQuestion;
+                            }
+
+                            if (logAnswer.Length > 30)
+                            {
+                                strLogAnswer = logAnswer.Substring(0, 30) + "...";
+                            }
+                            else
+                            {
+                                strLogAnswer = logAnswer;
+                            }
+
+                            DButil.QnALogSub(Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms |*| " + strLogQuestion + " |*| " + strLogAnswer );
+
                         }
 
                         Activity reply_ment = activity.CreateReply();
