@@ -294,7 +294,7 @@ namespace airportChatBot.DB
                     System.IO.StreamWriter swStream = File.AppendText(strPath);
                     string strLog = String.Format("{0}: {1}", dtNow.ToString("MM/dd/yyyy hh:mm:ss.fff"), strMsg);
                     swStream.WriteLine(strLog);
-                    swStream.Close(); ;
+                    swStream.Close();
                 }
             }
             catch (System.Exception e)
@@ -327,7 +327,7 @@ namespace airportChatBot.DB
                     System.IO.StreamWriter swStream = File.AppendText(strPath);
                     string strLog = String.Format("{0}: {1}", dtNow.ToString("MM/dd/yyyy hh:mm:ss.fff"), strMsg);
                     swStream.WriteLine(strLog);
-                    swStream.Close(); ;
+                    swStream.Close();
                 }
             }
             catch (System.Exception e)
