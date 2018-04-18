@@ -309,7 +309,9 @@ namespace airportChatBot
                             strReplyText = responseQna.Answer + " || score: " + Convert.ToInt32(responseQna.Score) + "p, " + ((endTime - startTime).Milliseconds) + "/ms";
 
                             DButil.QnALog(orgMent + " |*| " + responseQna.Answer + " |*| " + Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms");
-                            DButil.QnALogSub(Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms |*| " + orgMent.Substring(0,20) + " |*| " + responseQna.Answer.Substring(0,30) );
+                            //string logQuestion = orgMent.Trim();
+                            //string logAnswer = responseQna.Answer.Trim();
+                            //DButil.QnALogSub(Convert.ToInt32(responseQna.Score) + "p," + ((endTime - startTime).Milliseconds) + "/ms |*| " + logQuestion.Substring(0,16) + " |*| " + logAnswer.Substring(0,20) );
                         }
 
                         Activity reply_ment = activity.CreateReply();
